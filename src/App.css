@@ -9,7 +9,6 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
   padding: 20px;
   color: white;
 }
@@ -24,7 +23,7 @@
 }
 
 
-h1{
+h2{
     margin-top:0;
 }
 
@@ -49,4 +48,11 @@ h1{
 
 .delete-lane{
     margin-top: 30px;
+}
+
+.dropdown-toggle:focus + .dropdown-menu {
+    display: block;
+}
+.dropdown-menu:hover {
+    display: block;
 }

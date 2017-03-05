@@ -4,7 +4,7 @@ import AddLane from './AddLane';
 import LaneModel from '../models/LaneModel';
 import ItemModel from '../models/ItemModel';
 
-class Board extends Component {
+export default class Board extends Component {
     constructor(){
         super();
         this.state = {
@@ -76,5 +76,3 @@ class Board extends Component {
         );
     }
 }
-
-export default Board;

@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import Item from './Item';
 import ItemModel from '../models/ItemModel';
 
-class AddItem extends Component {
+export default class AddItem extends Component {
     constructor(){
         super();
         this.state = {
@@ -38,12 +38,11 @@ class AddItem extends Component {
 
     render() {
         return (
-            <form onSubmit={this.onSubmit} className="lane-item">
-                <Item value={this.state.item} onChange={this.onChange} />
-                <input type="submit" className="btn btn-primary" value="Add Item" />
+            <form onSubmit={this.onSubmit}>
+                <Item value={this.state.item} onChange={this.onChange}>
+                    <input type="submit" className="btn btn-primary" value="Add Item" />
+                </Item>
             </form>
         );
     }
 }
-
-export default AddItem;

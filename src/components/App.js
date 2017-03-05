@@ -7,7 +7,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Welcome to React Kanban</h2>
+          <h1>Welcome to React Kanban</h1>
         </div>
         <Board />
       </div>

@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import LaneModel from '../models/LaneModel';
 
-class AddLane extends Component {
+export default class AddLane extends Component {
     constructor(){
         super();
         this.state = {
@@ -42,7 +42,7 @@ class AddLane extends Component {
     render() {
         return (
             <form onSubmit={this.onSubmit} className="lane">
-                <h1>Add New Lane</h1>
+                <h2>Add New Lane</h2>
 
                 <div className="lane-item">
                 <div className="form-group">
@@ -55,5 +55,3 @@ class AddLane extends Component {
         );
     }
 }
-
-export default AddLane;

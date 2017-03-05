@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import ItemModel from '../models/ItemModel';
 
-class Item extends Component {
+export default class Item extends Component {
     static propTypes = {
         value: React.PropTypes.instanceOf(ItemModel),
         onChange: React.PropTypes.func,
@@ -19,7 +19,7 @@ class Item extends Component {
 
     render() {
         return (
-            <div>
+            <div className="lane-item">
                 <div className="form-group">
                     <label>Title</label>
                     <input type="text" className="form-control" value={this.props.value.title} name="title" onChange={this.onChange} />
@@ -28,9 +28,9 @@ class Item extends Component {
                     <label>Description</label>
                     <textarea type="text" className="form-control" value={this.props.value.description} name="description" onChange={this.onChange} />
                 </div>
+                {this.props.children}
             </div>
         );
     }
 }
 
-export default Item;
