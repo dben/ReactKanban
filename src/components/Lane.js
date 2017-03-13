@@ -9,6 +9,7 @@ export default class Lane extends Component {
         value: React.PropTypes.instanceOf(LaneModel),
         lanes: React.PropTypes.arrayOf(React.PropTypes.instanceOf(LaneModel)),
         onChangeLane: React.PropTypes.func,
+        onChangeItem: React.PropTypes.func,
         onAddLane: React.PropTypes.func,
         onRemoveLane: React.PropTypes.func,
         onChangeItemLane: React.PropTypes.func,
@@ -16,22 +17,17 @@ export default class Lane extends Component {
 
     onAddItem = item => {
         let lane = this.props.value;
-
-        lane.addItem(item);
-        this.props.onChangeLane(lane);
+        this.props.onChangeLane(LaneModel.addItem(lane, item));
     };
 
     onRemoveItem = idx => {
         let lane = this.props.value;
-
-        lane.removeItem(lane.items[idx]);
-        this.props.onChangeLane(lane);
+        this.props.onChangeLane(LaneModel.removeItem(lane, lane.items[idx]));
     };
 
     onReorder = (oldIdx, newIdx) => {
         let lane = this.props.value;
-        lane.swapOrder(oldIdx, newIdx);
-        this.props.onChangeLane(lane);
+        this.props.onChangeLane(LaneModel.swapOrder(lane, oldIdx, newIdx));
     };
 
     onChangeItemLane = (idx, newLane) => {
@@ -39,6 +35,10 @@ export default class Lane extends Component {
         this.props.onChangeItemLane(lane.items[idx], this.props.value, newLane);
     };
 
+    onChangeItem = (idx, newItem) => {
+        let lane = this.props.value;
+        this.props.onChangeLane(LaneModel.changeItem(lane, idx, newItem));
+    };
 
     onRemoveLane = e => {
         e.preventDefault();
@@ -54,7 +54,7 @@ export default class Lane extends Component {
                 <AddItem onAdd={this.onAddItem} />
 
                 {this.props.value.items.map((item, index) =>
-                    <Item key={item.title} value={item} onChange={this.props.onChangeItem}>
+                    <Item key={item.title} value={item} onChange={this.onChangeItem.bind(this, index)}>
                         <ItemButtons lanes={this.props.lanes.filter(x => x !== this.props.value)}
                                      index={index}
                                      total={this.props.value.items.length}

@@ -4,22 +4,35 @@ export default class LaneModel {
         this.items = items || [];
     }
 
-    addItem(item){
-        this.items.push(item);
+    static addItem(lane, item){
+        return new LaneModel(lane.title, [
+            ...lane.items,
+            item
+        ]);
     }
 
-    removeItem(item){
-        let idx = this.items.indexOf(item);
-
-        if (idx > -1){
-            this.items.splice(idx, 1);
-        }
+    static removeItem(lane, item){
+        return new LaneModel(lane.title, lane.items.filter(x => x !== item));
     }
 
-    swapOrder(indexA, indexB){
-        let a = this.items[indexA];
-        this.items[indexA] = this.items[indexB];
-        this.items[indexB] = a;
+    static changeItem(lane, idx ,item){
+        return new LaneModel(lane.title, [
+            ...lane.items.slice(0, idx),
+            item,
+            ...lane.items.slice(idx + 1)
+        ]);
+    }
+
+    static swapOrder(lane, indexA, indexB){
+        return new LaneModel(lane.title, lane.items.map((item, idx) => {
+            if (idx === indexA){
+                return lane.items[indexB]
+            } else if (idx === indexB){
+                return lane.items[indexA]
+            } else {
+                return item;
+            }
+        }));
     }
 
     checkValid() {

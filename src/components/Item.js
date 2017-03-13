@@ -8,11 +8,9 @@ export default class Item extends Component {
     };
 
     onChange = e => {
-        let item = this.props.value;
+        let item = Object.assign(new ItemModel(), this.props.value);
         let name = e.target.name;
-        let val = e.target.value;
-
-        item[name] = val;
+        item[name] = e.target.value;
 
         this.props.onChange(item);
     };
