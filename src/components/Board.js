@@ -1,12 +1,13 @@
 import React, { Component} from 'react';
-import Lane from './Lane';
-import AddLane from './AddLane';
 import LaneModel from '../models/LaneModel';
 import ItemModel from '../models/ItemModel';
+import Lane from './Lane';
+import AddLane from './AddLane';
 
 export default class Board extends Component {
     constructor(){
         super();
+
         this.state = {
             lanes: [
                 new LaneModel("Backlog", [
@@ -19,59 +20,62 @@ export default class Board extends Component {
         }
     }
 
-    onChangeLane = lane => {
+    static propTypes = {};
+
+    onChangeLanes = lane => {
         let lanes = this.state.lanes;
         let idx = lanes.findIndex(x => x.title === lane.title);
 
-        if (idx > -1) {
-            lanes.splice(idx, 1, lane);
+        if (idx > -1 ){
+            this.setState({
+                lanes: [
+                    ...lanes.slice(0, idx),
+                    lane,
+                    ...lanes.slice(idx + 1)
+                ]
+            });
         }
-
-        this.setState({lanes});
     };
 
-    onAddLane = lane =>{
-        let lanes = this.state.lanes;
-
-        lanes.push(lane);
-
-        this.setState({lanes});
+    onAddLane = lane => {
+        this.setState({
+            lanes: [...this.state.lanes, lane]
+        });
     };
 
     onRemoveLane = lane => {
-        let lanes = this.state.lanes;
-        let idx = lanes.indexOf(lane);
-
-        if (idx > -1){
-            lanes.splice(idx, 1);
-        }
-
-        this.setState({lanes});
+        this.setState({
+            lanes: this.state.lanes.filter(x => x !== lane)
+        });
     };
 
-
-    onChangeItemLane = (item, oldLane, newLane) => {
-        oldLane.removeItem(item);
-        newLane.addItem(item);
-        this.setState({lanes: this.state.lanes});
+    onChangeItemLane = (oldLane, newLane, item) => {
+        this.setState({lanes: this.state.lanes.map(lane => {
+                if (lane === oldLane){
+                    return LaneModel.removeItem(oldLane, item);
+                }else if(lane === newLane){
+                    return LaneModel.addItem(newLane, item);
+                }else{
+                    return lane;
+                }
+            })
+        });
     };
 
     render() {
         return (
             <div>
-
-
                 {this.state.lanes.map(lane =>
-                    <Lane
-                        key={lane.title}
-                        value={lane}
-                        lanes={this.state.lanes}
-                        onChangeLane={this.onChangeLane}
-                        onRemoveLane={this.onRemoveLane}
-                        onChangeItemLane={this.onChangeItemLane} />
+                    <Lane key={lane.title}
+                          value={lane}
+                          lanes={this.state.lanes}
+                          onChangeLane={this.onChangeLanes}
+                          onRemoveLane={this.onRemoveLane}
+                          onChangeItemLane={this.onChangeItemLane} />
                 )}
 
-                <AddLane onAddLane={this.onAddLane} />
+                <AddLane onAddLane={this.onAddLane}/>
+
             </div>
         );
     }

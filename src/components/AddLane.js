@@ -1,11 +1,12 @@
 import React, { Component} from 'react';
 import LaneModel from '../models/LaneModel';
 
+
 export default class AddLane extends Component {
     constructor(){
         super();
         this.state = {
-            lane: new LaneModel()
+            title: ''
         }
     }
 
@@ -13,43 +14,28 @@ export default class AddLane extends Component {
         onAddLane: React.PropTypes.func
     };
 
-    onChangeLaneTitle = e => {
-        let lane = this.state.lane;
-
-        lane.title = e.target.value;
-
-        this.setState({lane})
+    onChange = e =>{
+        this.setState({title: e.target.value})
     };
 
     onSubmit = e => {
         e.preventDefault();
-        let lane = this.state.lane;
+        this.props.onAddLane(new LaneModel(this.state.title));
 
-        try {
-            lane.checkValid();
-        }catch(err){
-            alert(err);
-            return;
-        }
-
-        this.props.onAddLane(lane);
-
-        this.setState({
-            lane: new LaneModel()
-        });
+        this.setState({title: ''})
     };
 
     render() {
+        
         return (
             <form onSubmit={this.onSubmit} className="lane">
                 <h2>Add New Lane</h2>
-
                 <div className="lane-item">
-                <div className="form-group">
-                    <label>Title</label>
-                    <input type="text" className="form-control" value={this.state.lane.title} onChange={this.onChangeLaneTitle} />
-                </div>
-                <input type="submit" className="btn btn-primary" value="Add Lane" />
+                    <div className="form-group">
+                        <label>Title</label>
+                        <input type="text" className="form-control" value={this.state.title} name="title" onChange={this.onChange} />
+                    </div>
+                    <input type="submit" className="btn btn-primary" value="Add Lane" />
                 </div>
             </form>
         );

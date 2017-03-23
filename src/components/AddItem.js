@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
-import Item from './Item';
 import ItemModel from '../models/ItemModel';
+import Item from './Item';
 
 export default class AddItem extends Component {
     constructor(){
@@ -15,28 +15,20 @@ export default class AddItem extends Component {
     };
 
     onChange = item => {
-        this.setState({item})
+        this.setState({item});
     };
 
     onSubmit = e => {
         e.preventDefault();
-        let item = this.state.item;
-
-        try {
-            item.checkValid();
-        }catch(err){
-            alert(err);
-            return;
-        }
-
-        this.props.onAdd(item);
+        this.props.onAdd(this.state.item);
 
         this.setState({
             item: new ItemModel()
-        });
+        })
     };
 
     render() {
+        
         return (
             <form onSubmit={this.onSubmit}>
                 <Item value={this.state.item} onChange={this.onChange}>

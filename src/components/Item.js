@@ -4,7 +4,7 @@ import ItemModel from '../models/ItemModel';
 export default class Item extends Component {
     static propTypes = {
         value: React.PropTypes.instanceOf(ItemModel),
-        onChange: React.PropTypes.func,
+        onChange: React.PropTypes.func
     };
 
     onChange = e => {
@@ -16,19 +16,21 @@ export default class Item extends Component {
     };
 
     render() {
+        let item = this.props.value;
         return (
             <div className="lane-item">
                 <div className="form-group">
                     <label>Title</label>
-                    <input type="text" className="form-control" value={this.props.value.title} name="title" onChange={this.onChange} />
+                    <input type="text" className="form-control" value={item.title} name="title" onChange={this.onChange} />
                 </div>
                 <div className="form-group">
                     <label>Description</label>
-                    <textarea type="text" className="form-control" value={this.props.value.description} name="description" onChange={this.onChange} />
+                    <textarea className="form-control" value={item.description} name="description" onChange={this.onChange} />
                 </div>
                 {this.props.children}
+
+
             </div>
         );
     }
 }
-
