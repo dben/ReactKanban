@@ -10,37 +10,40 @@ export default class ItemButtons extends Component {
     static propTypes = {
         lanes: React.PropTypes.arrayOf(React.PropTypes.instanceOf(LaneModel)),
         index: React.PropTypes.number,
-        total: React.PropTypes.number,
-        onRemove: React.PropTypes.func,
-        onReorder: React.PropTypes.func,
+        lane: React.PropTypes.instanceOf(LaneModel),
+        onChangeLane: React.PropTypes.func,
         onChangeItemLane: React.PropTypes.func
     };
 
+    onRemove = pd(() => this.props.onChangeLane(LaneModel.removeItem(this.props.lane, this.props.item)));
+
+    onUp = pd(() => this.props.onChangeLane(LaneModel.swapItems(this.props.lane, this.props.index, this.props.index -1)));
+
+    onDown = pd(() => this.props.onChangeLane(LaneModel.swapItems(this.props.lane, this.props.index, this.props.index + 1)));
+
     render() {
-        let {index,total,lanes, onReorder, onRemove, onChangeItemLane} = this.props;
-        let up = pd(onReorder.bind(this, index, index - 1));
-        let down = pd(onReorder.bind(this, index, index +1));
-        let remove = pd(onRemove);
+        let {index, lanes, onChangeItemLane} = this.props;
+        let total = this.props.lane.items.length;
+        let item = this.props.lane.items[index];
 
         return (
             <div>
                 {!index ? null :
-                    <button className="btn btn-default" onClick={up}><i className="glyphicon glyphicon-arrow-up" /></button> }
+                    <button className="btn btn-default" onClick={this.onUp}><i className="glyphicon glyphicon-arrow-up" /></button> }
 
                 {total <= index + 1 ? null :
-                    <button className="btn btn-default" onClick={down}><i className="glyphicon glyphicon-arrow-down" /></button>}
+                    <button className="btn btn-default" onClick={this.onDown}><i className="glyphicon glyphicon-arrow-down" /></button>}
 
                 <span className="dropdown">
                     <button className="btn btn-default dropdown-toggle">Move to<b className="caret" /></button>
                     <ul className="dropdown-menu">
                         {lanes.map(lane =>
-                            <li key={lane.title}><a href="#" onClick={pd(onChangeItemLane.bind(this, index, lane))}>{lane.title}</a></li>
+                            <li key={lane.title}><a href="#" onClick={pd(onChangeItemLane.bind(this, this.props.lane, lane, item))}>{lane.title}</a></li>
                         )}
                     </ul>
                 </span>
 
-                <button className="btn btn-danger pull-right" onClick={remove}><i className="glyphicon glyphicon-trash" /></button>
-
+                <button className="btn btn-danger pull-right" onClick={this.onRemove}><i className="glyphicon glyphicon-trash" /></button>
             </div>
         );
     }

@@ -14,21 +14,8 @@ export default class Lane extends Component {
         onChangeItemLane: React.PropTypes.func,
     };
 
-
     onAddItem = item => {
         this.props.onChangeLane(LaneModel.addItem(this.props.value, item));
-    };
-
-    onRemoveItem = item => {
-        this.props.onChangeLane(LaneModel.removeItem(this.props.value, item));
-    };
-
-    onReorder = (idxa, idxb) => {
-        this.props.onChangeLane(LaneModel.swapItems(this.props.value, idxa, idxb));
-    };
-
-    onChangeItemLane = (idx, newLane) => {
-        this.props.onChangeItemLane(this.props.value, newLane, this.props.value.items[idx]);
     };
 
     onChangeItem = (idx, item) => {
@@ -40,7 +27,6 @@ export default class Lane extends Component {
         this.props.onRemoveLane(this.props.value);
     };
 
-
     render() {
         let lane = this.props.value;
         return (
@@ -50,12 +36,11 @@ export default class Lane extends Component {
                 {lane.items.map((item, idx) =>
                     <Item key={item.title} value={item} onChange={this.onChangeItem.bind(this, idx)}>
                         <ItemButtons
-                            onChangeItemLane={this.onChangeItemLane}
-                            onRemove={this.onRemoveItem.bind(this, item)}
-                            onReorder={this.onReorder}
-                            lanes={this.props.lanes}
+                            onChangeItemLane={this.props.onChangeItemLane}
+                            onChangeLane={this.props.onChangeLane}
+                            lanes={this.props.lanes.filter(l => l !== lane)}
+                            lane={this.props.value}
                             index={idx}
-                            total={lane.items.length}
                         />
                     </Item>
                 )}
