@@ -1,12 +1,14 @@
 import React, { Component} from 'react';
+import {connect} from 'react-redux';
 import LaneModel from '../models/LaneModel';
+import {changeLane, changeItemLane} from '../actions';
 
 let pd = func => e => {
     e.preventDefault();
     func();
 };
 
-export default class ItemButtons extends Component {
+class ItemButtons extends Component {
     static propTypes = {
         lanes: React.PropTypes.arrayOf(React.PropTypes.instanceOf(LaneModel)),
         index: React.PropTypes.number,
@@ -15,14 +17,24 @@ export default class ItemButtons extends Component {
         onChangeItemLane: React.PropTypes.func
     };
 
-    onRemove = pd(() => this.props.onChangeLane(LaneModel.removeItem(this.props.lane, this.props.item)));
+    onRemove = pd(() => {
+        let {onChangeLane, lane, index} = this.props;
+        onChangeLane(LaneModel.removeItem(lane, lane.items[index]))
+    });
 
-    onUp = pd(() => this.props.onChangeLane(LaneModel.swapItems(this.props.lane, this.props.index, this.props.index -1)));
+    onUp = pd(() => {
+        let {onChangeLane, lane, index} = this.props;
+        onChangeLane(LaneModel.swapItems(lane, index, index -1))
+    });
 
-    onDown = pd(() => this.props.onChangeLane(LaneModel.swapItems(this.props.lane, this.props.index, this.props.index + 1)));
+    onDown = pd(() => {
+        let {onChangeLane, lane, index} = this.props;
+        onChangeLane(LaneModel.swapItems(lane, index, index + 1))
+    });
 
     render() {
-        let {index, lanes, onChangeItemLane} = this.props;
+        let {index, onChangeItemLane} = this.props;
+        let lanes = this.props.lanes.filter(l => l !== this.props.lane);
         let total = this.props.lane.items.length;
         let item = this.props.lane.items[index];
 
@@ -48,3 +60,13 @@ export default class ItemButtons extends Component {
         );
     }
 }
+
+export default connect(
+    state => ({
+        lanes: state.lanes
+    }),
+    dispatch => ({
+        onChangeLane: lane => dispatch(changeLane(lane)),
+        onChangeItemLane: (oldLane, newLane, item) => dispatch(changeItemLane(oldLane, newLane, item))
+    })
+)(ItemButtons);

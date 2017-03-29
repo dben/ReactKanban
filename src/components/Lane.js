@@ -8,10 +8,8 @@ import ItemButtons from './ItemButtons';
 export default class Lane extends Component {
     static propTypes = {
         value: React.PropTypes.instanceOf(LaneModel),
-        lanes: React.PropTypes.arrayOf(React.PropTypes.instanceOf(LaneModel)),
-        onChangeLane: React.PropTypes.func,
-        onRemoveLane: React.PropTypes.func,
-        onChangeItemLane: React.PropTypes.func,
+        onChangeLane: React.PropTypes.func.isRequired,
+        onRemoveLane: React.PropTypes.func.isRequired,
     };
 
     onAddItem = item => {
@@ -36,9 +34,6 @@ export default class Lane extends Component {
                 {lane.items.map((item, idx) =>
                     <Item key={item.title} value={item} onChange={this.onChangeItem.bind(this, idx)}>
                         <ItemButtons
-                            onChangeItemLane={this.props.onChangeItemLane}
-                            onChangeLane={this.props.onChangeLane}
-                            lanes={this.props.lanes.filter(l => l !== lane)}
                             lane={this.props.value}
                             index={idx}
                         />
